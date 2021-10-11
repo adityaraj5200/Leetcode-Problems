@@ -9,9 +9,9 @@
  *     TreeNode(int x, TreeNode *left, TreeNode *right) : val(x), left(left), right(right) {}
  * };
  */
-class Solution {
+class Solution{
 public:
-    int helper(TreeNode *root,int &ans){
+    int helper(TreeNode *root, int &ans){
         if(root == NULL) return 0;
         int left = helper(root->left, ans), right = helper(root->right, ans);
         ans = max(ans, left+right);
