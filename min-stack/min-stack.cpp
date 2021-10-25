@@ -1,29 +1,28 @@
 class MinStack {
+     stack<pair<int, int>> st;
+
 public:
-    /** initialize your data structure here. */
-    vector<int> stack;
-    multiset<int> pq;
-    MinStack() {
-        stack.resize(30001);
+    void push(int x) {
+        int min;
+        if (st.empty()) {
+            min = x;
+        }
+        else {
+            min = std::min(st.top().second,x);
+        }
+        st.push({x, min});
     }
-    
-    void push(int val) {
-        stack.push_back(val);
-        pq.insert(val);
-    }
-    
+
     void pop() {
-        int val = stack.back();
-        pq.erase(pq.find(val));
-        stack.pop_back();
+        st.pop();
     }
-    
+
     int top() {
-        return stack.back();
+        return st.top().first;
     }
-    
+
     int getMin() {
-        return *(pq.begin());
+        return st.top().second;
     }
 };
 
