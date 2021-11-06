@@ -10,8 +10,7 @@ public:
         }
         bitxor = 1<<shifts;
         for(int &val: nums)
-            if(val & bitxor)
-                a ^= val;
+            if(val & bitxor) a ^= val;
             else b ^= val;
         return {a,b};
     }
