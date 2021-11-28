@@ -1,28 +1,29 @@
 class Solution {
 public:
-    void helper(int currnum,vector<bool> &vis,vector<int> &vec,vector<vector<int>> &result,vector<vector<int>> &graph){
-        if(vis[currnum]) return;
-        if(currnum == graph.size()-1){
-            vec.push_back(graph.size()-1);
-            result.push_back(vec);
-            vec.pop_back();
+    void helper(int &currNode,vector<bool> &vis,vector<int> &path,vector<vector<int>> &result,vector<vector<int>> &graph){
+        if(vis[currNode]) return;
+        if(currNode == graph.size()-1){
+            path.push_back(currNode);
+            result.push_back(path);
+            path.pop_back();
             return;
         }
         
-        vis[currnum] = true;
-        vec.push_back(currnum);
+        vis[currNode] = true;
+        path.push_back(currNode);
         
-        for(int &val: graph[currnum])
-            helper(val,vis,vec,result,graph);
+        for(int &nextNode: graph[currNode])
+            helper(nextNode,vis,path,result,graph);
         
-        vec.pop_back();
-        vis[currnum] = false;
+        path.pop_back();
+        vis[currNode] = false;
     }
     vector<vector<int>> allPathsSourceTarget(vector<vector<int>>& graph){
         vector<bool> vis(graph.size(),false);
-        vector<int> vec;
+        vector<int> path;
         vector<vector<int>> result;
-        helper(0,vis,vec,result,graph);
+        int currNode = 0;
+        helper(currNode,vis,path,result,graph);
         return result;
     }
 };
