@@ -1,1 +1,1 @@
-​
+Solved using the concept of nearest smaller to left and nearest smaller to right.
