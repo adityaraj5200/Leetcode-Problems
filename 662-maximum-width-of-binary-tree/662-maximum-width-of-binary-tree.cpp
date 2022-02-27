@@ -15,13 +15,13 @@ public:
         if(root==NULL) return 0;
         queue<TreeNode*> q;
         q.push(root);
-        int ans = 0;
+        long long ans = 0;
         root->val = 1;
         
         while(!q.empty()){
             int sz = q.size();
-            int toSubtract = q.front()->val - 1;
-            int minval = q.front()->val, maxval;
+            long long toSubtract = q.front()->val - 1;
+            long long minval = q.front()->val, maxval;
             
             while(sz--){
                 TreeNode *node = q.front();
@@ -31,17 +31,17 @@ public:
                 
                 node->val -= toSubtract;
                 if(node->left){
-                    node->left->val = node->val*2 ;
+                    node->left->val = node->val*2LL ;
                     q.push(node->left);
                 }
                 if(node->right){
-                    node->right->val = node->val*2 + 1;
+                    node->right->val = node->val*2LL + 1LL;
                     q.push(node->right);
                 }
             }
             
-            ans = max(ans,maxval-minval+1);
+            ans = max(ans,maxval-minval+1LL);
         }
-        return ans;
+        return (int)ans;
     }
 };
