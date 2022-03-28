@@ -5,8 +5,10 @@ public:
         int sum = 0, ans = 0;
         for(int &val: nums){
             sum += val;
-            if(mp.find(sum-k) != mp.end())
-                ans += mp[sum-k];
+            int find = sum-k;
+            if(mp.find(find) != mp.end())
+                ans += mp[find];
+            
             mp[sum]++;
         }
         
