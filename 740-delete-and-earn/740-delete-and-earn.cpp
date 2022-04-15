@@ -1,22 +1,30 @@
-class Solution{
+class Solution {
 public:
-    int deleteAndEarn(vector<int>& nums){
-        const int maxN = 1e4;
-        vector<int> freq(maxN+1,0);
-        for(int val: nums) 
+    int deleteAndEarn(vector<int>& nums) {
+        map<int,int> freq;
+        for(int &val: nums)
             freq[val]++;
         
-        int inc = freq[1];
-        int exc = 0;
-        int inc_prev=inc,exc_prev=exc;
-        
-        for(int val=2;val<=maxN;val++){
-            inc = freq[val]*val + exc_prev;
-            exc = max(inc_prev,exc_prev);
-            inc_prev = inc;
-            exc_prev = exc;
+        int last = -1, include = 0, exclude = 0, ans = 0;
+        for(auto p: freq){
+            int points = p.first*p.second, val = p.first;
+            
+            if(val == last+1){
+                int tempinc = include, tempexc = exclude;
+                include = exclude + points;
+                exclude = max(tempinc, tempexc);
+            }
+            else{
+                ans += max(include,exclude);
+                include = points;
+                exclude = 0;
+            }
+            
+            last = val;
         }
         
-        return max(inc,exc);
+        ans += max(include,exclude);
+        
+        return ans;
     }
 };
