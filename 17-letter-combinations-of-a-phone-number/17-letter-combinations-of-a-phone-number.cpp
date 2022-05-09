@@ -1,25 +1,24 @@
 class Solution {
 public:
-    vector<string> res;
-    vector<vector<char>> store = {{},{},{'a','b','c'},{'d','e','f'},{'g','h','i'},{'j','k','l'},{'m','n','o'},{'p','q','r','s'},{'t','u','v'},{'w','x','y','z'}};
-    
-    void helper(string &digits,int i,string &curr){
-        if(i==digits.length()){
-            res.push_back(curr);
-            return;
-        }
-        
-        for(char &ch: store[digits[i]-'0']){
-            curr.push_back(ch);
-            helper(digits,i+1,curr);
-            curr.pop_back();
-        }
-    }
+    const vector<string> pad = {
+        "", "", "abc", "def", "ghi", "jkl",
+        "mno", "pqrs", "tuv", "wxyz"
+    };
     
     vector<string> letterCombinations(string digits) {
-        if(digits.size()==0) return {};
-        string curr;
-        helper(digits,0,curr);
-        return res;
+        if (digits.empty()) return {};
+		vector<string> result;
+        result.push_back("");
+        
+        for(auto digit: digits) {
+            vector<string> tmp;
+            for(auto candidate: pad[digit - '0']) {
+                for(auto s: result) {
+                    tmp.push_back(s + candidate);
+                }
+            }
+            result.swap(tmp);
+        }
+        return result;
     }
 };
