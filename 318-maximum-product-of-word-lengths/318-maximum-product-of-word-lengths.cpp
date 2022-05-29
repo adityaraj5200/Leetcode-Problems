@@ -1,12 +1,13 @@
 class Solution {
 public:
-    bool hasCommon(set<char> &s, set<char> &t){
-        for(char ch: s){
-            if(t.find(ch) != t.end())
-                return true;
+    bool non_intersecting(set<char>& s1,set<char>& s2){
+        auto it1 = s1.begin(),it2 = s2.begin();
+        while(it1!=s1.end() && it2!=s2.end()){
+            if(*it1<*it2) it1++;
+            else if(*it1>*it2) it2++;
+            else return false;
         }
-        
-        return false;
+        return true;
     }
     
     int maxProduct(vector<string>& words) {
@@ -21,10 +22,9 @@ public:
         
         for(int i=0;i<n;i++){
             for(int j=i+1;j<n;j++){
-                if(!hasCommon(words_set[i], words_set[j])){
-                    int len = words[i].length()*words[j].length();
-                    if(len > ans)
-                        ans = len;
+                if(non_intersecting(words_set[i], words_set[j])){
+                    int len = words[i].length() * words[j].length();
+                    ans = max(ans ,len);
                 }
             }
         }
