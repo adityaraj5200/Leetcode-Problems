@@ -1,16 +1,14 @@
 class Solution {
-public:    
+public:
+    int longestCommonSubsequence(string &a, string &b) {
+        short m[2][1000] = {};
+        for (int i = 0; i < a.size(); ++i)
+            for (int j = 0; j < b.size(); ++j)
+                m[!(i%2)][j+1] = a[i]==b[j] ? m[i%2][j]+1 : max(m[i%2][j+1], m[!(i%2)][j]);
+        return m[a.size()%2][b.size()];
+    }
+    
     int minDistance(string word1, string word2) {
-        const int n = word1.length(), m = word2.length();
-        vector<vector<int>> dp = vector<vector<int>>(n+1,vector<int>(m+1,0));
-        int lcslength = 0; // it is the Longest Common Subsequence
-        for(int i=1;i<=n;i++){
-            for(int j=1;j<=m;j++){
-                dp[i][j] = word1[i-1]==word2[j-1] ? 1+dp[i-1][j-1] : max(dp[i-1][j],dp[i][j-1]);
-                lcslength = max(lcslength,dp[i][j]);
-            }
-        }
-
-        return n+m - 2*lcslength;
+        return word1.size()+word2.size()-(2*longestCommonSubsequence(word1,word2));
     }
 };
