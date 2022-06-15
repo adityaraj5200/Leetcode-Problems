@@ -1,34 +1,25 @@
 class Solution {
 public:
-    map<int,set<string>> m;
-    map<string,int> dp;
-    
-    
-    int longestStrChain(vector<string>& words) {
+
+    int longestStrChain(vector<string>& words){
+        sort(words.begin(), words.end(),[](const string &s1, const string &s2) {
+           return s1.length() < s2.length();
+        });
+        unordered_map<string, int> dp;
+        
+        int res = 0;
+        
         for(string &word: words){
-            m[word.length()].insert(word);
             dp[word] = 1;
-        }
-        
-        int ans = 1;
-        for(int len=2;len<=16;len++){
-            for(string word: m[len]){
-                for(int skip=0;skip<len;skip++){
-                    string possible_predecessor;
-                    for(int i=0;i<len;i++){
-                        if(i==skip) continue;
-                        possible_predecessor += word[i];
-                        
-                    }
-                    if(m[len-1].find(possible_predecessor) != m[len-1].end()){
-                        dp[word] = max(dp[word], 1+dp[possible_predecessor]);
-                        ans = max(ans, dp[word]);
-                    }
-                }
+            for(int j=0;j<word.length();j++){
+                string possible_predecessor = word.substr(0,j)+word.substr(j+1);
+                
+                if(dp.find(possible_predecessor)!=dp.end())
+                    dp[word] = max(dp[word],dp[possible_predecessor]+1);
             }
+            res = max(res,dp[word]);
         }
         
-        return ans;
-        
+        return res;
     }
 };
