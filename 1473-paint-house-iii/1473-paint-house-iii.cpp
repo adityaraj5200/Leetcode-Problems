@@ -7,8 +7,8 @@ public:
             return target==0 ? 0 : 1e9;
         
         if(houses[idx] != 0){
-            // return dp[idx][target][last_color] = recurse(houses,cost,idx+1,target-(last_color!=houses[idx]),houses[idx]);
-            return recurse(houses,cost,idx+1,target-(last_color!=houses[idx]),houses[idx]);
+            return dp[idx][target][last_color] = recurse(houses,cost,idx+1,target-(last_color!=houses[idx]),houses[idx]);
+            // return recurse(houses,cost,idx+1,target-(last_color!=houses[idx]),houses[idx]);
         }
         
         if(dp[idx][target][last_color] != 0)
