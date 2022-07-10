@@ -6,10 +6,14 @@ public:
         res.push_back(folder[0]);
         
         for (int i = 1; i < folder.size(); i++) {
-            string root = res[res.size() - 1] + "/";
-            string prefix = folder[i].substr(0, root.size());
-            if (prefix != root)
+            // string root = res[res.size() - 1] + "/";
+            // string prefix = folder[i].substr(0, root.size());
+            
+            if(res[res.size() - 1] + "/"  !=  folder[i].substr(0, 1 + res.back().size()))
                 res.push_back(folder[i]);
+            
+            // if (prefix != root)
+            //     res.push_back(folder[i]);
         }
         
         return res;
