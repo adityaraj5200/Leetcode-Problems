@@ -13,7 +13,7 @@ public:
             for(int c2=c1;c2<m;c2++){
                 
                 int sum = 0;
-                map<int,int> seen = {{0,1}};
+                unordered_map<int,int> seen = {{0,1}};
                 
                 for(int row=0;row<n;row++){
                     sum += matrix[row][c2] - (c1>0 ? matrix[row][c1-1] : 0);
