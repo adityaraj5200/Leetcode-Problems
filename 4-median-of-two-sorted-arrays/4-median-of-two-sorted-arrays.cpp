@@ -14,6 +14,12 @@ public:
                 take2 -= exceed;
                 take1 += exceed;
             }
+            else if(take1 > n){
+                int exceed = take1-n;
+                take1 -= exceed;
+                take2 += exceed;
+            }
+            
             
             int last_covered_in_1 = take1==0 ? INT_MIN : nums1[take1-1];
             int last_covered_in_2 = take2==0 ? INT_MIN : nums2[take2-1];
@@ -41,10 +47,6 @@ public:
         n = nums1.size();
         m = nums2.size();
         size = n+m;
-        if(n<m){
-            nums1.swap(nums2);
-            swap(n,m);
-        }
         
         double ans = 0.0;
         if(size&1){
