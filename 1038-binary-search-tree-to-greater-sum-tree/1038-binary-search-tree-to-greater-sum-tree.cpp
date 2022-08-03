@@ -15,28 +15,23 @@ public:
     void recurse(TreeNode* root){
         if(root == NULL) return;
         
-//         if(root != NULL && root->left == NULL && root->right == NULL)
-//             return;
+ //        if(root != NULL && root->left == NULL && root->right == NULL)
+ //            return;
         
-//         //TreeNode* temp = root;
+         //TreeNode* temp = root;
         
-//         recurse(root->right);
-        
-//         int a = 0;
-//         if(root->right != NULL){
-//             sum = root->right->val;
-//         }
-//         root->val = sum+root->val;
-//         sum = root->val;
-//         recurse(root->left);
+         recurse(root->right);
+         root->val = sum+root->val;
+         sum = root->val;
+         recurse(root->left);
 //         root->val += sum;
 //         sum = root->val;
-        recurse(root->right);
+//         recurse(root->right);
         
-        sum += root->val;
-        root->val = sum;
+//         sum += root->val;
+//         root->val = sum;
         
-        recurse(root->left);
+//         recurse(root->left);
         
     }
     
