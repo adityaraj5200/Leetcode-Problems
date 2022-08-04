@@ -10,22 +10,36 @@
  */
 class Solution {
 public:
+    
+    // bool cmp(ListNode* l1, ListNode* l2){
+    //     return l1->val > l2->val;
+    // }
+    
+    struct cmp {
+        bool operator()(ListNode* l1, ListNode* l2){
+            return l1->val > l2->val;
+        }
+    };
+    
     ListNode* mergeKLists(vector<ListNode*>& lists) {
-        map<int,int> hash;
-        for(auto &node: lists){
-            ListNode *curr = node;
-            while(curr != NULL){
-                hash[curr->val]++;
-                curr = curr->next;
-            }
+        priority_queue<ListNode*,vector<ListNode*>,cmp> pq;
+        
+        for(ListNode* head: lists){
+            if(head != NULL)
+                pq.push(head);
         }
         
-        ListNode *prehead = new ListNode(-1,NULL), *curr = prehead;
+        ListNode* prehead = new ListNode(),*curr = prehead;
+        prehead->next = NULL;
         
-        for(auto &p: hash){
-            while(p.second>0){
-                curr = curr->next = new ListNode(p.first);
-                p.second--;
+        while(!pq.empty()){
+            ListNode* topNode = pq.top();
+            // cout<<topNode->val<<' ';
+            pq.pop();
+            
+            curr = curr->next = topNode;
+            if(topNode->next){
+                pq.push(topNode->next);
             }
         }
         
