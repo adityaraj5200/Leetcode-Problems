@@ -1,25 +1,27 @@
 class Solution {
 public:
-    vector<vector<int>> result;
-    vector<int> curr;
-    void helper(vector<int>& candidates,int i,int sum,int target){
-        if(sum>target)
-            return;
+    void recurse(int idx,vector<int>& candidates,int target,vector<int>& curr,vector<vector<int>>& ans){
+        if(target<0) return;
         
-        if(i==candidates.size()){
-            if(sum==target) result.push_back(curr);
+        if(idx==candidates.size()){
+            if(target==0){
+                ans.push_back(curr);
+            }
             return;
         }
         
-        curr.push_back(candidates[i]);
-        helper(candidates,i,sum+candidates[i],target);
+        curr.push_back(candidates[idx]);
+        recurse(idx,candidates,target-candidates[idx],curr,ans);
         curr.pop_back();
-        helper(candidates,i+1,sum,target);
+        recurse(idx+1,candidates,target,curr,ans);
+        // recurse(idx+1,candidates,target,curr,ans);
     }
-        
-    vector<vector<int>> combinationSum(vector<int>& candidates, int target) {
+    
+    vector<vector<int>> combinationSum(vector<int>& candidates, int target){
         sort(candidates.begin(),candidates.end(),greater<int>());
-        helper(candidates,0,0,target);
-        return result;
+        vector<int> curr;
+        vector<vector<int>> ans;
+        recurse(0,candidates,target,curr,ans);
+        return ans;
     }
 };
