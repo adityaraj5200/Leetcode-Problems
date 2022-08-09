@@ -47,7 +47,7 @@ public:
     int numFactoredBinaryTrees(vector<int>& arr) {
         long long mod = 1e9+7, ans = 0LL;
         sort(arr.begin(),arr.end());
-        unordered_map<int,long long> dp;
+        map<int,long long> dp;
         
         for(int i=0;i<arr.size();i++){
             dp[arr[i]] = 1LL;
