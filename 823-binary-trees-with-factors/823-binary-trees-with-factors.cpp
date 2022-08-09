@@ -45,31 +45,24 @@ public:
     }
     
     int numFactoredBinaryTrees(vector<int>& arr) {
-        const long long n = arr.size(), mod = 1e9+7;
+        long long mod = 1e9+7, ans = 0LL;
         sort(arr.begin(),arr.end());
-        vector<long long> dp(n,1LL);
-        for(int i=1;i<n;i++){
-            long long curr_num = 1LL*arr[i];
-            for(int j=2;j*j<=curr_num;j++){
-                if(curr_num%j == 0){
-                    long long factor1 = curr_num/j;
-                    long long factor2 = curr_num/factor1;
-                    int idx1 = isPresent(factor1,i-1,arr);
-                    int idx2 = isPresent(factor2,i-1,arr);
-                    // debug(curr_num,factor1,factor2,idx1,idx2);
-                    if(idx1 != -1 && idx2 != -1){
-                        dp[i] += ((idx1!=idx2 ? 2 : 1) * dp[idx1] * dp[idx2])%mod;
-                    }
+        unordered_map<int,long long> dp;
+        
+        for(int i=0;i<arr.size();i++){
+            dp[arr[i]] = 1LL;
+            for(int j=0;j<i;j++){
+                int factor1 = arr[j];
+                int factor2 = arr[i]/arr[j];                
+                // Checking if arr[j] is even a factor or not?
+                // And, does factor2 exists in array or not?
+                if(arr[i]%arr[j]==0 && dp.count(factor2)){
+                    dp[arr[i]] = (dp[arr[i]] + dp[factor1] * dp[factor2])%mod;
                 }
             }
+            
+            ans = (ans + dp[arr[i]])%mod;
         }
-        
-        long long ans = 0;
-        for(long long &value: dp){
-            ans = (ans + value)%mod;
-        }
-        
-        // debug(dp);
         
         return (int)ans;
     }
