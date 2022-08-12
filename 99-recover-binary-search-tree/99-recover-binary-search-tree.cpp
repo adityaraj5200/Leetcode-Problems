@@ -11,24 +11,27 @@
  */
 class Solution {
 public:
-    TreeNode* firstNode = NULL, *secondNode = NULL, *prevNode = NULL;
-    void inorder(TreeNode *root){
+    TreeNode *firstNode = NULL, *secondNode = NULL, *prevNode = NULL;
+    
+    void helper(TreeNode* root){
         if(root==NULL) return;
         
-        inorder(root->left);
+        helper(root->left);
         
-        if(firstNode==NULL && prevNode!=NULL && root->val<=prevNode->val)
-            firstNode = prevNode;
-        if(firstNode!=NULL && prevNode!=NULL && root->val<=prevNode->val)
-            secondNode = root;
-        
+        if(prevNode!=NULL && prevNode->val > root->val){
+            if(firstNode == NULL) 
+                firstNode = prevNode;
+            
+            if(firstNode != NULL)
+                secondNode = root;
+        }
         prevNode = root;
         
-        inorder(root->right);
+        helper(root->right);
     }
     
     void recoverTree(TreeNode* root) {
-        inorder(root);
+        helper(root);
         swap(firstNode->val, secondNode->val);
     }
 };
