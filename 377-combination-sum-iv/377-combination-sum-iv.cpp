@@ -1,17 +1,22 @@
 class Solution {
 public:
+    int helper(vector<int> &nums,int target,vector<unsigned int> &dp){
+        if(dp[target] != -1) return dp[target]; // Already calculated
+        if(target==0) return 1; // found a way 
+        
+        unsigned int ans = 0;
+        for(int &val: nums)
+            if(target-val >= 0)
+                ans += helper(nums,target-val,dp);
+        
+        return dp[target] = ans;
+    }
+    
     int combinationSum4(vector<int>& nums, int target) {
-        const int n = nums.size();
-        vector<unsigned int> dp(target+1,0);
+        vector<unsigned int> dp(target+1,-1);
         dp[0] = 1;
         
-        for(int curr_target=1;curr_target<=target;curr_target++){
-            for(int &val: nums){
-                if(curr_target-val >= 0)
-                    dp[curr_target] += dp[curr_target-val];
-            }
-        }
-        
-        return dp.back();
+        int ans = helper(nums,target,dp);
+        return ans;
     }
 };
