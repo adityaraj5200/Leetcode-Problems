@@ -6,36 +6,44 @@ public:
         }
     }
     
+//     bool detect_loop(int curr_node,vector<int> &status,vector<vector<int>> &adj){
+//         if(status[curr_node] == processed)
+//             return false; // we didn't found any loop afterwards
+//         if(status[curr_node] == processing)
+//             return true; // A loop was detected
+        
+//         status[curr_node] = processing;
+        
+//         for(int &next_node: adj[curr_node])
+//             if(detect_loop(next_node,status,adj))
+//                 return true;
+        
+//         status[curr_node] = processed;
+        
+//         return false;
+//     }
+    
     #define unvisited 0
     #define processed 1
     #define processing 2
-    bool detect_loop(int curr_node,vector<int> &status,vector<vector<int>> &adj){
+    bool dfs(int curr_node,vector<vector<int>> &adj,stack<int> &stk,vector<int> &status){
         if(status[curr_node] == processed)
-            return false; // we didn't found any loop afterwards
+            return true; // we didn't found any loop afterwards
         if(status[curr_node] == processing)
-            return true; // A loop was detected
+            return false; // A loop was detected
         
         status[curr_node] = processing;
         
-        for(int &next_node: adj[curr_node])
-            if(detect_loop(next_node,status,adj))
-                return true;
+        for(int &next_node: adj[curr_node]){
+            if(dfs(next_node,adj,stk,status) == false)
+                return false;
+        }
         
         status[curr_node] = processed;
         
-        return false;
-    }
-    
-    void dfs(int curr_node,vector<vector<int>> &adj,stack<int> &stk,vector<bool> &visited){
-        if(visited[curr_node])
-            return;
-        
-        visited[curr_node] = true;
-        for(int &next_node: adj[curr_node]){
-            dfs(next_node,adj,stk,visited);
-        }
-        
         stk.push(curr_node);
+        
+        return true;
     }
     
     vector<int> findOrder(int numCourses, vector<vector<int>>& prerequisites) {
@@ -44,14 +52,10 @@ public:
         
         makeAdjList(prerequisites,adj);
         
-        for(int i=0;i<numCourses;i++)
-            if(detect_loop(i,status,adj))
-                return {};
-        
         stack<int> stk;
-        vector<bool> visited(numCourses,false);
         for(int i=0;i<numCourses;i++){
-            dfs(i,adj,stk,visited);
+            if(dfs(i,adj,stk,status) == false)
+                return {};
         }
         
         vector<int> ans;
