@@ -1,14 +1,18 @@
 class Solution {
 public:
     int minJumps(vector<int>& arr) {
-        int n = arr.size();
+        const int n = arr.size();
         
-        unordered_map<int,vector<int>> mp;
-        for(int i=0;i<n;i++)
-            mp[arr[i]].push_back(i);
+        if(n==1)
+            return 0;
         
-        vector<bool> vis(n,false);
-        vis[0] = true;
+        map<int,vector<int>> indices;
+        for(int i=0;i<n;i++){
+            indices[arr[i]].push_back(i);
+        }
+        
+        vector<int> dp(n,INT_MAX);
+        dp[0] = 0;
         
         queue<int> q;
         q.push(0);
@@ -17,34 +21,34 @@ public:
         
         while(!q.empty()){
             int sz = q.size();
-            while(sz--){
-                int idx = q.front();
-                q.pop();
-                
-                if(idx == n-1)
-                    return jumps;
-
-                for(int &next_idx: mp[arr[idx]]){
-                    if(!vis[next_idx]){
-                        vis[next_idx] = true;
-                        q.push(next_idx);
-                    }
-                }
-                mp.erase(arr[idx]);
-
-                auto safelyPush = [&](int idx){
-                    if(idx>=0 && idx<n && !vis[idx]){
-                        vis[idx] = true;
-                        q.push(idx);
-                    }
-                };
-                
-                safelyPush(idx+1);
-                safelyPush(idx-1);
-            }
             
             jumps++;
+            
+            while(sz--){
+                int curr_idx = q.front();
+                q.pop();
+                
+                int front = curr_idx+1;
+                int back = curr_idx-1;
+                if(front<n && dp[front]>jumps){
+                    dp[front] = jumps;
+                    q.push(front);
+                }
+                if(back>=0 && dp[back]>jumps){
+                    dp[back] = jumps;
+                    q.push(back);
+                }
+                
+                for(int other_idx: indices[arr[curr_idx]]){
+                    if(dp[other_idx]>jumps){
+                        dp[other_idx] = jumps;
+                        q.push(other_idx);
+                    }
+                }
+                indices.erase(arr[curr_idx]);
+            }
         }
-        return jumps;
+        
+        return dp[n-1];
     }
 };
