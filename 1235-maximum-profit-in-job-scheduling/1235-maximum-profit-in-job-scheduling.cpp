@@ -32,42 +32,29 @@ class Solution {
 public:    
     int jobScheduling(vector<int>& startTime, vector<int>& endTime, vector<int>& profit){
         const int n = startTime.size();
-        vector<vector<int>> jobs(n,vector<int>(3));
+        vector<vector<int>> jobs(n);
         
-        for(int i=0;i<n;i++){
-            jobs[i][0] = startTime[i];
-            jobs[i][1] = endTime[i];
-            jobs[i][2] = profit[i];
-        }
+        for(int i=0;i<n;i++)
+            jobs[i] = {endTime[i],startTime[i],profit[i]};
         
-        sort(jobs.begin(),jobs.end(),[](vector<int> &v1,vector<int> &v2){
-            if(v1[1] == v2[1]){ // If end times are equal then sort by start time
-                if(v1[0] == v2[0]) // If start times are equal then sort by profit
-                    return v1[2] < v2[2];
-                else // otherwise sort by start time
-                    return v1[0] < v2[0];
-            }
-            else // otherwise sort by end time
-                return v1[1] < v2[1]; 
-        });
+        sort(jobs.begin(),jobs.end());
         
         map<int,int> dp = {{0,0}}; // dp[t] will tell me what is the best profit I can make with the time from 0 to t.
-        
-        int ans = 0;
+           
+        int overallBestProfit = 0;
         
         for(int i=0;i<n;i++){
-            int currStartTime = jobs[i][0];
-            int currEndTime = jobs[i][1];
-            int currProfit = jobs[i][2];
+            int currEndTime = jobs[i][0];
+            int currStartTime = jobs[i][1];
+            int associatedProfit = jobs[i][2];
             
-            auto it = dp.lower_bound(-currStartTime);
-            int prevBestProfit = it->second;
+            int currBestProfit = prev(dp.upper_bound(currStartTime))->second + associatedProfit;
             
-            dp[-currEndTime] = max(prevBestProfit + currProfit, ans);
+            overallBestProfit = max(overallBestProfit,currBestProfit);
             
-            ans = max(ans, dp[-currEndTime]);
+            dp[currEndTime] = overallBestProfit;
         }
         
-        return ans;
+        return overallBestProfit;
     }
 };
