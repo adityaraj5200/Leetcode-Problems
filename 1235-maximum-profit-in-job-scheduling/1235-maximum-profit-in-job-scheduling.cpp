@@ -62,9 +62,8 @@ public:
             
             auto it = dp.lower_bound(-currStartTime);
             int prevBestProfit = it->second;
-            dp[-currEndTime] = prevBestProfit + currProfit;
             
-            dp[-currEndTime] = max(dp[-currEndTime], ans);
+            dp[-currEndTime] = max(prevBestProfit + currProfit, ans);
             
             ans = max(ans, dp[-currEndTime]);
         }
