@@ -1,29 +1,23 @@
+// Basically iterate from the right most to left side and find the first Dip
+// Swap this first Dip with the guy who is on right side and just greater than the first Dip guy
+// Reverse whatever is on the right side of the first Dip guy
 class Solution {
 public:
     void nextPermutation(vector<int>& nums) {
-        int n=nums.size();
-        int firstDip=n-2;
-        // 4765321 will get changed to
-        // 5123467
+        int n=nums.size(), firstDip=n-2;
         while(firstDip>=0 && nums[firstDip]>=nums[firstDip+1]){
             firstDip--;
         }
 
-        int minGreater = firstDip+1;
         if(firstDip>=0){
-            while(minGreater<n && nums[minGreater]>nums[firstDip]){
-                minGreater++;
+            int justLarger = n-1;
+            while(nums[justLarger]<=nums[firstDip]){
+                justLarger--;
             }
-            minGreater--;
 
-            if(minGreater<n & firstDip>=0){
-                swap(nums[firstDip], nums[minGreater]);
-            }
+            swap(nums[firstDip], nums[justLarger]);
         }
 
-        int revSt=firstDip+1, revEnd=n-1;
-        while(revSt<revEnd){
-            swap(nums[revSt++],nums[revEnd--]);
-        }        
+        reverse(nums.begin()+firstDip+1, nums.end());
     }
 };
