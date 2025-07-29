@@ -7,10 +7,10 @@ public:
         int maxLen = 0, sum = 0;
         for (int i = 0; i < n; i++) {
             sum += (nums[i] == 0 ? -1 : 1);
-			if (seenSumAt[sum + offset] >= -1){
+			if (seenSumAt[sum + offset] != INT_MIN){ // We have seen this sum before, which means we can create a subarray from where it was seen first and the current index
                 maxLen = max(maxLen, i - seenSumAt[sum + offset]);
             }
-			else seenSumAt[sum + offset] = i;
+			else seenSumAt[sum + offset] = i; // havn't seen. Mark it and remember it for future
         }
         return maxLen;
     }
