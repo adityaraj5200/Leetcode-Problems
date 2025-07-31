@@ -1,9 +1,9 @@
 class Solution {
 public:
     int subarrayBitwiseORs(vector<int>& arr) {
-        unordered_set<int> uniqueORs, lastResult;
+        set<int> uniqueORs, lastResult;
         for(int &num: arr){
-            unordered_set<int> nextSet = {num};
+            set<int> nextSet = {num};
             // lastResult contains all the ORs of the subarrays ending at the guy just before the 'num'
             for(int ORvalue: lastResult){
                 nextSet.insert(num|ORvalue);
