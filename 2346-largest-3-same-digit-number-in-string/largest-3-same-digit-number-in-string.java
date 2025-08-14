@@ -1,25 +1,19 @@
 class Solution {
     public String largestGoodInteger(String num) {
-        Integer ans = -1;
-        for(int i=0;i<num.length()-2;i++){
-            if(num.charAt(i)==num.charAt(i+1) && num.charAt(i+1)==num.charAt(i+2)){
-                int digit = num.charAt(i)-'0';
-                if(digit > ans){
-                    ans = digit;
+        String ans = "";
+
+        for (int i = 2; i < num.length(); ++i) {
+            char a = num.charAt(i - 2);
+            char b = num.charAt(i - 1);
+            char c = num.charAt(i);
+            if (a == b && b == c) {
+                String good = num.substring(i - 2, i + 1);
+                if (good.compareTo(ans) > 0) {
+                    ans = good;
                 }
             }
         }
 
-        if(ans == -1){
-            return "";
-        }
-        else{
-            StringBuilder sbd = new StringBuilder();
-            sbd.append(ans.toString());
-            sbd.append(ans.toString());
-            sbd.append(ans.toString());
-
-            return sbd.toString();
-        }
+        return ans;
     }
 }
