@@ -7,10 +7,6 @@ class Solution {
             else break;
         }
 
-        int[] result = new int[2];
-        result[0] = i+1;
-        result[1] = j+1;
-
-        return result;
+        return new int[]{i+1,j+1};
     }
 }
