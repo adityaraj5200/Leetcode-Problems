@@ -21,13 +21,14 @@ class Solution {
         int leftDepth = getDepth(node.left);
         int rightDepth = getDepth(node.right);
 
-        ans = Math.max(ans, 1 + leftDepth + rightDepth);
+        ans = Math.max(ans, leftDepth+rightDepth);
 
         return 1+Math.max(leftDepth,rightDepth);
     }
 
     public int diameterOfBinaryTree(TreeNode root) {
         getDepth(root);
-        return Math.max(0,ans-1);
+        return ans;
+        // return Math.max(0,ans);
     }
 }
