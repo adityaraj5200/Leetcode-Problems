@@ -1,22 +1,17 @@
+// TC: O(n log n), SC: O(n)
 class Solution {
 public:
     string sortVowels(string s) {
-        vector<int> vowelsIndices;
-        string vowelsOfStr;
-        set<int> vowels = {'a','e','i','o','u','A','E','I','O','U'};
-        for(int i=0;i<s.length();i++){
-            if(vowels.find(s[i]) != vowels.end()){
-                vowelsOfStr += s[i];
-            }
+        unordered_set<char> vowels={'a','e','i','o','u','A','E','I','O','U'};
+        string collected;
+        for(char c:s){
+            if(vowels.count(c)) collected+=c;
         }
-
-        sort(vowelsOfStr.begin(), vowelsOfStr.end());
-        for(int i=0,k=0;i<s.length();i++){
-            if(vowels.find(s[i]) != vowels.end()){
-                s[i] = vowelsOfStr[k++];
-            }
+        sort(collected.begin(),collected.end());
+        int k=0;
+        for(char& c:s){
+            if(vowels.count(c)) c=collected[k++];
         }
-
         return s;
     }
 };
