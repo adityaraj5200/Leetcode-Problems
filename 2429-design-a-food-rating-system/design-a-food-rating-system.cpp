@@ -1,41 +1,48 @@
+// TC: O(n log n), SC: O(n), where n = number of foods
 class FoodRatings {
+private:
+    // For each cuisine, maintain a set of (−rating, foodName)
+    // Negative rating so that highest rating foods come first (since set is ordered ascending)
+    unordered_map<string, set<pair<int, string>>> cuisineToFoods;
+    // Map each food to its current rating
+    unordered_map<string, int> foodToRating;
+    // Map each food to its cuisine
+    unordered_map<string, string> foodToCuisine;
+
 public:
-    struct Cmp {
-        bool operator()(const auto& a, const auto& b) const {
-            if(a.first != b.first) {
-                return a < b;
-            }
-            return a.second > b.second;
-        }
-    };
-
-    unordered_map<string, priority_queue<pair<int, string>, vector<pair<int, string>>, Cmp>> c2f;
-    unordered_map<string, pair<string, int>> f2c;
-
+    // Constructor
     FoodRatings(vector<string>& foods, vector<string>& cuisines, vector<int>& ratings) {
         int n = foods.size();
-        for(int i = 0; i < n; ++i) {
-            f2c[foods[i]] = {cuisines[i], ratings[i]};
-            c2f[cuisines[i]].emplace(ratings[i], foods[i]);
+        for(int i = 0; i < n; i++) {
+            const string &f = foods[i];
+            const string &c = cuisines[i];
+            int& r = ratings[i];
+
+            foodToRating[f] = r;
+            foodToCuisine[f] = c;
+            cuisineToFoods[c].insert({ -r, f });
         }
     }
-    
+
+    // Change the rating of a food
+    // TC: O(log m), where m = number of foods in that food's cuisine
     void changeRating(string food, int newRating) {
-        f2c[food].second = newRating;
-        c2f[f2c[food].first].emplace(newRating, food);
+        string c = foodToCuisine[food];
+        int oldRating = foodToRating[food];
+        // Remove old entry
+        cuisineToFoods[c].erase({ -oldRating, food });
+        // Insert new rating
+        cuisineToFoods[c].insert({ -newRating, food });
+        // Update in map
+        foodToRating[food] = newRating;
     }
-    
+
+    // Return the highest rated food for a cuisine
+    // If tie in rating, lexicographically smaller food name is chosen because set orders by pair
+    // TC: O(1) for lookup of begin()
     string highestRated(string cuisine) {
-        while(c2f[cuisine].top().first != f2c[c2f[cuisine].top().second].second) {
-            c2f[cuisine].pop();
-        }
-        return c2f[cuisine].top().second;
+        auto &st = cuisineToFoods[cuisine];
+        // The first element in the set is what we want
+        return st.begin()->second;
     }
 };
-
-/**
- * Your FoodRatings object will be instantiated and called as such:
- * FoodRatings* obj = new FoodRatings(foods, cuisines, ratings);
- * obj->changeRating(food,newRating);
- * string param_2 = obj->highestRated(cuisine);
- */
