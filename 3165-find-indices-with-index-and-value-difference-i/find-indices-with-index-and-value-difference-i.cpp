@@ -1,31 +1,20 @@
+// Time Complexity: O(n)  (single pass over array)
+// Space Complexity: O(1) (only a few variables used)
+
 class Solution {
 public:
     vector<int> findIndices(vector<int>& nums, int indexDifference, int valueDifference) {
-        for(int i=0,j=indexDifference,behindMinIndex=0,behindMaxIndex=0;j<nums.size();i++,j++){
-            if(nums[i]<nums[behindMinIndex]){
-                behindMinIndex = i;
-            }
-            if(nums[i]>nums[behindMaxIndex]){
-                behindMaxIndex = i;
-            }
+        int n=nums.size();
+        int minIdx=0,maxIdx=0;
 
-            int diff1 = abs(nums[behindMinIndex]-nums[j]);
-            int diff2 = abs(nums[behindMaxIndex]-nums[j]);
+        for(int i=0,j=indexDifference;j<n;i++,j++){
+            if(nums[i]<nums[minIdx]) minIdx=i;
+            if(nums[i]>nums[maxIdx]) maxIdx=i;
 
-            int currValDiff = max(diff1, diff2);
-
-
-
-            if(currValDiff >= valueDifference){
-                // found the answer
-                if(diff1 >= valueDifference){
-                    return {behindMinIndex,j};
-                }
-                else{
-                    return {behindMaxIndex,j};
-                }
-
-            }
+            if(abs(nums[j]-nums[minIdx])>=valueDifference)
+                return {minIdx,j};
+            if(abs(nums[j]-nums[maxIdx])>=valueDifference)
+                return {maxIdx,j};
         }
 
         return {-1,-1};
