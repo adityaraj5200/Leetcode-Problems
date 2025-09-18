@@ -1,48 +1,45 @@
+// Some 14ms runtime guy
 class TaskManager {
-private:
-    map<int,int> taskIdToUserId;
-    map<int,int> taskIdToPriority;
-    map<int,set<int>> priorityToTaskIds;
 public:
-    TaskManager(vector<vector<int>>& tasks) {
-        for(vector<int>& task: tasks){
-            int userId = task[0];
-            int taskId = task[1];
-            int priority = task[2];
+    unordered_map<int, pair<int, int>> mpp;
+    priority_queue<pair<int, int>> pq;
 
-            add(userId,taskId,priority);
-        }
+    TaskManager(vector<vector<int>>& tasks) {
+        for(auto& task : tasks){
+            mpp[task[1]] = {task[2], task[0]};
+            pq.push({task[2], task[1]});
+        }    
     }
     
     void add(int userId, int taskId, int priority) {
-        taskIdToUserId[taskId] = userId;
-        taskIdToPriority[taskId] = priority;
-        priorityToTaskIds[priority].insert(taskId);
+        mpp[taskId] = {priority, userId};
+        pq.push({priority, taskId});
     }
     
     void edit(int taskId, int newPriority) {
-        rmv(taskId);
-        priorityToTaskIds[newPriority].insert(taskId);
-        taskIdToPriority[taskId] = newPriority;
+        mpp[taskId].first = newPriority;
+        pq.push({newPriority, taskId});
     }
     
     void rmv(int taskId) {
-        int priority = taskIdToPriority[taskId];
-        taskIdToPriority.erase(taskId);
-        priorityToTaskIds[priority].erase(taskId);
-        if(priorityToTaskIds[priority].size() == 0){
-            priorityToTaskIds.erase(priority);
-        }
+        mpp[taskId].first = -1;
     }
     
     int execTop() {
-        if(priorityToTaskIds.size()==0) return -1;
+        while(!pq.empty()){
+            auto [priority, taskId] = pq.top();
 
-        int highestPriority = priorityToTaskIds.rbegin()->first;
-        int highestTaskId = *(priorityToTaskIds[highestPriority].rbegin());
-        int userId = taskIdToUserId[highestTaskId];
-        rmv(highestTaskId);
-        return userId;
+            if(mpp[taskId].first == priority){
+                mpp[taskId].first = -1;
+                pq.pop();
+                return mpp[taskId].second;
+            }
+            else{
+                pq.pop();
+            }
+        }
+
+        return -1;
     }
 };
 
