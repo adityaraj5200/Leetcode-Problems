@@ -1,41 +1,47 @@
-// Time: O(log(min(n,m)))
-// Space: O(1)
+// Time Complexity: O(log(min(m, n)))
+// Space Complexity: O(1)
+
 class Solution {
 public:
-    double findMedianSortedArrays(vector<int>& nums1, vector<int>& nums2) {
-        // Ensure nums1 is the smaller array for simpler binary search
-        if(nums1.size()>nums2.size()){
-            return findMedianSortedArrays(nums2,nums1);
-        }
+    double findMedianSortedArrays(const vector<int>& nums1, const vector<int>& nums2) {
+        const vector<int> &A = nums1, &B = nums2;
+        int m = A.size(), n = B.size();
+        // ensure A is the smaller array
+        if (m > n) return findMedianSortedArrays(B, A);
         
-        int n=nums1.size(),m=nums2.size();
-        int total=n+m;
-        int half=(total+1)/2;
+        int total = m + n;
+        int half = (total + 1) / 2;
         
-        int low=0,high=n;
-        while(low<=high){
-            int cut1=(low+high)/2;
-            int cut2=half-cut1;
+        int l = 0, r = m;
+        while(l <= r) {
+            int i = (l + r) / 2;          // number of elements taken from A
+            int j = half - i;             // number of elements taken from B
             
-            int l1=(cut1==0)?INT_MIN:nums1[cut1-1];
-            int l2=(cut2==0)?INT_MIN:nums2[cut2-1];
-            int r1=(cut1==n)?INT_MAX:nums1[cut1];
-            int r2=(cut2==m)?INT_MAX:nums2[cut2];
+            int Aleft = (i == 0 ? INT_MIN : A[i-1]);
+            int Aright = (i == m ? INT_MAX : A[i]);
+            int Bleft = (j == 0 ? INT_MIN : B[j-1]);
+            int Bright = (j == n ? INT_MAX : B[j]);
             
-            if(l1<=r2 && l2<=r1){
-                if(total%2==0){
-                    return (max(l1,l2)+min(r1,r2))/2.0;
+            if (Aleft <= Bright && Bleft <= Aright) {
+                // correct partition
+                if (total % 2 == 1) {
+                    // odd number of total elements
+                    return (double) max(Aleft, Bleft);
                 } else {
-                    return max(l1,l2);
+                    // even number of total elements
+                    return ((double) max(Aleft, Bleft) + min(Aright, Bright)) / 2.0;
                 }
-            } 
-            else if(l1>r2){
-                high=cut1-1;
-            } 
+            }
+            else if (Aleft > Bright) {
+                // too many taken from A, move left
+                r = i - 1;
+            }
             else {
-                low=cut1+1;
+                // Aleft <= Bright but Bleft > Aright => too few taken from A
+                l = i + 1;
             }
         }
-        return -1; // should never reach here
+        
+        return -1; // control should never reach here
     }
 };
