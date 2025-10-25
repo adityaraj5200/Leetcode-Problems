@@ -1,19 +1,22 @@
 class StockSpanner {
 private:
-    stack<pair<int,int>> stk; // {price,span}
+    stack<pair<int,int>> stk; // {idx, value}
+    int idx;
 public:
-    StockSpanner() {}
+    StockSpanner() {
+        idx = 0;
+        stk.push({-1,INT_MAX});
+    }
     
     int next(int price) {
-        int currSpan = 1;
-        while(!stk.empty() && stk.top().first <= price){
-            currSpan += stk.top().second;
+        while(!stk.empty() && stk.top().second<=price){
             stk.pop();
         }
 
-        stk.push({price,currSpan});
+        int ans = idx-stk.top().first;
+        stk.push({idx++,price});
         
-        return currSpan;
+        return ans;
     }
 };
 
