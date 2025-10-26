@@ -1,21 +1,22 @@
-// Time Complexity: O(n) where n = nums.size()
-// Space Complexity: O(1)
 class Solution {
 public:
     int longestOnes(vector<int>& nums, int k) {
-        int left = 0, zeroCount = 0, maxLen = 0;
-        for (int right = 0; right < nums.size(); ++right) {
-            if (nums[right] == 0) {
+        int st=0,end=0,ans=0,n=nums.size(),zeroCount=0;
+        while(end<n){
+            if(nums[end++]==0){
                 zeroCount++;
             }
-            while (zeroCount > k) {
-                if (nums[left] == 0) {
+
+            // Shrink window if more than k zeros
+            while(zeroCount>k){
+                if(nums[st]==0){
                     zeroCount--;
                 }
-                left++;
+                st++;
             }
-            maxLen = max(maxLen, right - left + 1);
+
+            ans=max(ans,end-st);
         }
-        return maxLen;
+        return ans;
     }
 };
