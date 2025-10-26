@@ -1,27 +1,31 @@
-// Time Complexity: O(n) where n = nums.size()
-// Space Complexity: O(1) extra (or O(1) excluding input/output)
-class Solution {
-private:
-    // Count subarrays with sum ≤ S
-    int countAtMost(const vector<int>& nums, int S) {
-        if (S < 0) return 0;
-        int left = 0,count = 0, sum = 0;
-        for (int right = 0; right < nums.size(); ++right) {
-            sum += nums[right];
-            // Shrink window until sum ≤ S
-            while (sum > S) {
-                sum -= nums[left];
-                ++left;
-            }
-            // All subarrays ending at right with start in [left..right] are valid
-            count += (right - left + 1);
-        }
-        return count;
-    }
+// Time Complexity: O(n)
+// Space Complexity: O(n)
+// Approach:
+// Use prefix sum + hashmap to count subarrays whose sum equals `goal`.
+// For each index, if prefixSum - goal has been seen before,
+// it means there are that many subarrays ending here with sum = goal.
 
+class Solution {
 public:
     int numSubarraysWithSum(vector<int>& nums, int goal) {
-        // Number of subarrays with sum exactly = goal
-        return (int)(countAtMost(nums, goal) - countAtMost(nums, goal - 1));
+        int n = nums.size(), prefixSum = 0, result = 0;
+        unordered_map<int,int> prefixCount;  // prefixSum → frequency
+        prefixCount[0] = 1; // Base case: prefix sum = 0 occurs once
+
+
+        for (int num : nums){
+            prefixSum += num;
+
+            // If there exists a prefix with sum = prefixSum - goal,
+            // then subarray between that prefix and current index sums to `goal`.
+            if (prefixCount.count(prefixSum - goal)) {
+                result += prefixCount[prefixSum - goal];
+            }
+
+            // Record current prefixSum for future subarrays
+            prefixCount[prefixSum]++;
+        }
+
+        return result;
     }
 };
