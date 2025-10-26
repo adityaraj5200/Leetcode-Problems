@@ -1,50 +1,30 @@
+// Time Complexity: O(n)
+// Space Complexity: O(n)
+// Approach:
+// Use prefix sums where prefixSum = number of odd elements up to current index.
+// For each index, if there exists a previous prefixSum = (current prefixSum - k),
+// then the subarray between them has exactly k odd numbers.
+
 class Solution {
 public:
     int numberOfSubarrays(vector<int>& nums, int k) {
-        // EEEOEEOEEOEEOO
-        int st=0,end=0,ans=0,cntOdd=0,n=nums.size(),firstOddInWindow=-1;
-        if(k>n) return 0;
+        int n = nums.size(), prefixSum = 0, ans = 0;
+        vector<int> prefixCount(n + 1, 0);  // prefixSum → frequency count
+        prefixCount[0] = 1;  // base case (empty subarray)
+        
 
-        while(end<n && cntOdd<k){
-            if(nums[end]&1){
-                cntOdd++;
-                if(firstOddInWindow==-1){
-                    firstOddInWindow = end;
-                }
-            }
-            end++;
-        }
+        for (int num : nums) {
+            // Increment prefixSum if current number is odd
+            if (num & 1) prefixSum++;
 
-        if(cntOdd<k) return 0;
-        end--;
-
-        // At this point, cntOdd==k
-        while(st<n && end<n){
-            // Handle for windows, cntOdd==k
-            while(end<n && cntOdd==k){
-                int contribution = firstOddInWindow-st+1;
-                ans += contribution;
-
-                end++;
-                if(end<n){
-                    if(nums[end]&1){
-                        cntOdd++;
-                    }
-                }
+            // If there was a previous prefix with (prefixSum - k),
+            // it means subarray between that prefix and current index has exactly k odds.
+            if (prefixSum - k >= 0) {
+                ans += prefixCount[prefixSum - k];
             }
 
-            // Now, cntOdd>k, so shrink the window
-            while(cntOdd>k){
-                if(nums[st]&1){
-                    cntOdd--;
-                }
-                st++;
-            }
-
-            firstOddInWindow = st;
-            while(nums[firstOddInWindow]%2==0){
-                firstOddInWindow++;
-            }
+            // Record current prefix sum
+            prefixCount[prefixSum]++;
         }
 
         return ans;
