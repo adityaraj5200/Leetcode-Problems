@@ -9,7 +9,7 @@ class Solution {
 public:
     int numSubarraysWithSum(vector<int>& nums, int goal) {
         int n = nums.size(), prefixSum = 0, result = 0;
-        unordered_map<int,int> prefixCount;  // prefixSum → frequency
+        map<int,int> prefixCount;  // prefixSum → frequency
         prefixCount[0] = 1; // Base case: prefix sum = 0 occurs once
 
 
