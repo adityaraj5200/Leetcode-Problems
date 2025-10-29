@@ -1,18 +1,11 @@
 class Solution {
 public:
     int smallestNumber(int n) {
-        bool sawHighestBit = false;
-        int x = n;
-        for(int i=10;i>=0;i--){
-            if(n&(1<<i)){
-                sawHighestBit = true;
-            }
-
-            if(sawHighestBit){
-                x |= (1<<i);
-            }
+        int x = 1;
+        while(x-1 < n){
+            x <<= 1;
         }
 
-        return x;
+        return x-1;
     }
 };
