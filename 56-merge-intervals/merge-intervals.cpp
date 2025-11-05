@@ -1,3 +1,15 @@
+// Time Complexity: O(n log n), where n = number of intervals
+// Space Complexity: O(n)
+
+// Approach:
+// 1. Sort all intervals by their start time to ensure chronological order.
+// 2. Initialize `maxEndTime` to track the furthest end seen so far.
+// 3. Traverse each interval:
+//      - If the current interval starts after `maxEndTime`, it means no overlap → push it to the result.
+//      - Otherwise, the current interval overlaps with the previous → merge them by updating the last interval’s end time.
+// 4. Update `maxEndTime` after every interval to the maximum of current and previous end times.
+// 5. Return the merged list of intervals.
+
 class Solution {
 public:
     vector<vector<int>> merge(vector<vector<int>>& intervals) {
