@@ -1,13 +1,20 @@
+// TC: O(n)
+// SC: O(1)
+// Approach:
+// Maintain length of current consecutive '1's streak. 
+// Every time you extend the streak, add its length to answer. 
+// Reset streak when '0' appears. Use modulo as required.
+
 class Solution {
 public:
     int numSub(string s) {
-        int ans = 0, continuousOnes = 0, MOD = 1e9+7;
+        const int MOD=1e9+7;
+        long long ans=0,streak=0;
 
-        for(char& ch: s){
-            continuousOnes = ch=='1' ? continuousOnes+1 : 0;
-            ans = (ans+continuousOnes)%MOD;
+        for(char c:s){
+            streak = c=='1'?streak+1:0;
+            ans = (ans+streak)%MOD;
         }
-
         return ans;
     }
 };
