@@ -1,0 +1,17 @@
+class Solution {
+public:
+    bool kLengthApart(vector<int>& nums, int k) {
+        int dist = 1e9;
+        for(int& num: nums){
+            if(num==1){
+                if(dist < k) return false;
+                dist = 0;
+            }
+            else{
+                dist++;
+            }
+        }
+
+        return true;
+    }
+};
