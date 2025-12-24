@@ -3,13 +3,10 @@ class Solution {
         int totalApples = Arrays.stream(apple).sum();
         Arrays.sort(capacity);
 
-        int count = 0;
-        for(int i=capacity.length-1;i>=0;i--){
-            totalApples -= capacity[i];
+        int count = 0, reminaing = totalApples, m = capacity.length;
+        for(int i=m-1;i>=0 && reminaing>0;i--){
+            reminaing -= capacity[i];
             count++;
-            if(totalApples <= 0){
-                break;
-            }
         }
 
         return count;
